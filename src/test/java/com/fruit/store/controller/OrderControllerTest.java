@@ -57,5 +57,6 @@ public class OrderControllerTest {
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertNotNull(response.getBody());
     assertEquals(85.0, response.getBody().getTotal());
+    assertEquals(60.0, response.getBody().getItems().get(0).getPrice());
   }
 }

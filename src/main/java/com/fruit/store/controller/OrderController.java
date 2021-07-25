@@ -35,10 +35,10 @@ public class OrderController {
       items.add(new Item(ItemType.valueOf(itemRequest.getType().name()), itemRequest.getQuantity()));
     }
     Order order = service.buildOrder(items);
-    List<ItemResponse> itemsResponse = new ArrayList();
+    List<ItemResponse> itemsResponse = new ArrayList<>();
     for (Item item : order.getItems()) {
       ItemResponse itemResponse = new ItemResponse(com.fruit.store.controller.model.ItemType.valueOf(
-            item.getType().name()), item.getQuantity(), 0.0);
+            item.getType().name()), item.getQuantity(), item.getPrice());
       itemsResponse.add(itemResponse);
     }
     return ResponseEntity.ok(new OrderResponse(itemsResponse, order.getTotal()));

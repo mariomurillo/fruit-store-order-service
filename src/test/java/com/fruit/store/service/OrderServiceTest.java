@@ -38,5 +38,6 @@ public class OrderServiceTest {
 
     assertNotNull(order);
     assertEquals(110.0, order.getTotal());
+    assertEquals(60.0, order.getItems().get(0).getPrice());
   }
 }
