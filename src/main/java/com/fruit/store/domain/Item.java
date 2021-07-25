@@ -1,6 +1,8 @@
 package com.fruit.store.domain;
 
-public class Item {
+import java.util.Objects;
+
+public class Item implements Comparable<Item> {
 
   private final ItemType type;
 
@@ -30,5 +32,20 @@ public class Item {
 
   public Double getPrice() {
     return this.price;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null ||getClass() != o.getClass()) return false;
+    Item that = (Item) o;
+    return Objects.equals(this.getType(), that.getType())
+      && Objects.equals(this.getQuantity(), that.getQuantity())
+      && Objects.equals(this.getPrice(), that.getPrice());
+  }
+
+  @Override
+  public int compareTo(Item that) {
+    return getType().compareTo(that.getType());
   }
 }

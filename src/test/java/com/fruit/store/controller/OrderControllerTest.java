@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fruit.store.controller.model.ItemRequest;
+import com.fruit.store.controller.model.ItemResponse;
 import com.fruit.store.controller.model.ItemType;
 import com.fruit.store.controller.model.OrderRequest;
 import com.fruit.store.controller.model.OrderResponse;
@@ -42,8 +43,8 @@ public class OrderControllerTest {
 
     List<ItemRequest> items = new ArrayList<>();
 
-    ItemRequest apple = new ItemRequest(ItemType.APPLE, 1);
-    ItemRequest orange = new ItemRequest(ItemType.ORANGE, 1);
+    ItemRequest apple = new ItemRequest(ItemType.APPLE, 2);
+    ItemRequest orange = new ItemRequest(ItemType.ORANGE, 3);
 
     items.add(apple);
     items.add(orange);
@@ -54,9 +55,22 @@ public class OrderControllerTest {
 
     ResponseEntity<OrderResponse> response = this.restTemplate.postForEntity(uri, request, OrderResponse.class);
 
+    List<ItemResponse> itemsResponse = response.getBody().getItems();
+
+    int appleIndex = 0;
+    int orangeIndex = 0;
+
+    for (int i = 0; i < itemsResponse.size(); i++) {
+      appleIndex = ItemType.APPLE.equals(itemsResponse.get(i).getType()) ? i : appleIndex;
+      orangeIndex = ItemType.ORANGE.equals(itemsResponse.get(i).getType()) ? i : orangeIndex;
+    }
+
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertEquals(85.0, response.getBody().getTotal());
-    assertEquals(60.0, response.getBody().getItems().get(0).getPrice());
+    assertEquals(110.0, response.getBody().getTotal());
+    assertEquals(60.0, itemsResponse.get(appleIndex).getPrice());
+    assertEquals(2, itemsResponse.get(appleIndex).getQuantity());
+    assertEquals(50.0, itemsResponse.get(orangeIndex).getPrice());
+    assertEquals(3, itemsResponse.get(orangeIndex).getQuantity());
   }
 }

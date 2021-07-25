@@ -1,6 +1,7 @@
 package com.fruit.store.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
 import com.fruit.store.domain.Item;
 import com.fruit.store.domain.ItemType;
 import com.fruit.store.domain.Order;
+import com.fruit.store.service.OfferService;
 import com.fruit.store.service.OrderService;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -20,10 +22,14 @@ public class DefaultOrderService implements OrderService {
 
   private final Double orangeCost;
 
+  private final OfferService offerService;
+
   public DefaultOrderService(@Value("${fruit.store.cost.apple}") Double appleCost,
-      @Value("${fruit.store.cost.orange}") Double orangeCost) {
+      @Value("${fruit.store.cost.orange}") Double orangeCost,
+      OfferService offerService) {
     this.appleCost = appleCost;
     this.orangeCost = orangeCost;
+    this.offerService = offerService;
   }
 
   public Order buildOrder(List<Item> items) throws IllegalArgumentException {
@@ -52,6 +58,9 @@ public class DefaultOrderService implements OrderService {
       }
       orderItems.add(item);
     }
+
+    Collections.sort(orderItems);
+    orderItems = offerService.apply(orderItems);
     Double total = 0.0;
     for (Item item : orderItems) {
       total += item.getPrice();
