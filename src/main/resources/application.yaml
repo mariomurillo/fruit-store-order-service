@@ -3,3 +3,12 @@ fruit:
     cost:
       apple: 60.0
       orange: 25.0
+spring:
+  datasource: 
+    url: jdbc:postgresql://localhost:5432/fruitstoredb
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.PostgreSQL91Dialect

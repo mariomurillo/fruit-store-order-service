@@ -8,4 +8,8 @@ import com.fruit.store.domain.Order;
 public interface OrderService {
 
   public Order buildOrder(List<Item> items) throws IllegalArgumentException;
+
+  public Order getOrder(Long id);
+
+  public List<Order> getOrders();
 }

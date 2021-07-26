@@ -2,13 +2,28 @@ package com.fruit.store.domain;
 
 import java.util.Objects;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Item implements Comparable<Item> {
+
+  @Id
+  @GeneratedValue
+  private Long id;
 
   private final ItemType type;
 
   private final Integer quantity;
 
   private final Double price;
+
+  public Item() {
+    this.type = null;
+    this.quantity = null;
+    this.price = null;
+  }
 
   public Item(ItemType type, Integer quantity) {
     this.type = type;

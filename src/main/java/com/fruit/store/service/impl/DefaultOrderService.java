@@ -9,6 +9,7 @@ import java.util.Map;
 import com.fruit.store.domain.Item;
 import com.fruit.store.domain.ItemType;
 import com.fruit.store.domain.Order;
+import com.fruit.store.repository.OrderRepository;
 import com.fruit.store.service.OfferService;
 import com.fruit.store.service.OrderService;
 
@@ -24,12 +25,16 @@ public class DefaultOrderService implements OrderService {
 
   private final OfferService offerService;
 
+  private final OrderRepository repository;
+
   public DefaultOrderService(@Value("${fruit.store.cost.apple}") Double appleCost,
       @Value("${fruit.store.cost.orange}") Double orangeCost,
-      OfferService offerService) {
+      OfferService offerService,
+      OrderRepository repository) {
     this.appleCost = appleCost;
     this.orangeCost = orangeCost;
     this.offerService = offerService;
+    this.repository = repository;
   }
 
   public Order buildOrder(List<Item> items) throws IllegalArgumentException {
@@ -65,6 +70,16 @@ public class DefaultOrderService implements OrderService {
     for (Item item : orderItems) {
       total += item.getPrice();
     }
-    return new Order(orderItems, total);
+    Order order = new Order(orderItems, total);
+    repository.save(order);
+    return order;
+  }
+
+  public Order getOrder(Long id) {
+    return repository.findById(id).orElseThrow();
+  }
+
+  public List<Order> getOrders() {
+    return repository.findAll();
   }
 }

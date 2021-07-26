@@ -20,7 +20,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -34,7 +36,7 @@ public class OrderControllerTest {
   private TestRestTemplate restTemplate;
 
   @Test
-  public void buildOrderSuccessfulTest() throws URISyntaxException{
+  public void buildOrderSuccessfulTest() throws URISyntaxException {
     StringBuilder baseUrl = new StringBuilder("http://localhost:");
     baseUrl.append(this.port);
     baseUrl.append("/order");
@@ -72,5 +74,32 @@ public class OrderControllerTest {
     assertEquals(2, itemsResponse.get(appleIndex).getQuantity());
     assertEquals(50.0, itemsResponse.get(orangeIndex).getPrice());
     assertEquals(3, itemsResponse.get(orangeIndex).getQuantity());
+  }
+
+  @Test
+  public void getOrderByIdTest() {
+    StringBuilder baseUrl = new StringBuilder("http://localhost:");
+    baseUrl.append(this.port);
+    baseUrl.append("/order");
+    baseUrl.append("/{id}");
+
+    ResponseEntity<OrderResponse> response = this.restTemplate.getForEntity(baseUrl.toString(), OrderResponse.class, 1l);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response);
+    assertNotNull(response.getBody());
+  }
+
+  @Test
+  public void getOrders() {
+    StringBuilder baseUrl = new StringBuilder("http://localhost:");
+    baseUrl.append(this.port);
+    baseUrl.append("/order");
+
+    var response = this.restTemplate.getForEntity(baseUrl.toString(), List.class);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response);
+    assertNotNull(response.getBody());
   }
 }

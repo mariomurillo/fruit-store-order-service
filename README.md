@@ -4,7 +4,9 @@ This project was generate with Spring Boot, Java 11 and Gradle.
 
 ## Run project
 
-For run the project, in the root folder you can run the next command:
+For run the project, you need have a PostgreSQL running in your local environment and change the credentials configuration [here](https://github.com/mariomurillo//fruit-store-order-serviceblob/master/src/main/resources/.applicationyml#L9)
+
+After configurate the database, in the root folder you can run the next command:
 
 `./gradlew bootRun`
 

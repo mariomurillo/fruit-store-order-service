@@ -1,8 +1,9 @@
 package com.fruit.store.controller.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class OrderResponse {
+public class OrderResponse implements Serializable {
 
   private final List<ItemResponse> items;
 
